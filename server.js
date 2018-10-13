@@ -32,10 +32,17 @@ wss.on('connection', function(client, request) {
   // greet the newly connected user
   client.send('Welcome, ' + decodeURIComponent(wsname) + '!');
 
+
+  var cli = '[' + decodeURIComponent(wsname) + '] ';
+
   // Register a listener on each message of each connection
   client.on('message', function(message) {
 
-    var cli = '[' + decodeURIComponent(wsname) + '] ';
+    var tempo = message.split(',')[0];
+    var this_id = tempo.substr(tempo.length - 1); // => "1"
+      
+    var url_i = message.split(',')[1] + "," +  message.split(',')[2];
+  
     console.log("message from", cli);
     // when receiving a message, broadcast it to all the connected clients
     wss.broadcast(cli + message);
@@ -51,3 +58,4 @@ server.listen(port, host, function() {
 process.on('SIGINT', function() {
   process.exit(0);
 });
+
